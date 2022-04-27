@@ -2,6 +2,7 @@ import mechanize
 from bs4 import BeautifulSoup
 import urllib # pip install requests
 import http.cookiejar # pip install cookiejar
+## para build, instalar pyinstaller, depois rodar pyinstaller <script>.py
 
 print("> Iniciando!")
 cj = http.cookiejar.CookieJar()
@@ -17,9 +18,8 @@ br.select_form(nr=0)
 br.form['id_usuario'] = 'coord'
 br.form['senha'] = 'indra'
 br.submit()  # vai retornar um response_seek_wrapper mas é normal
-print("> Login!")
+print("> Login efetuado com sucesso!")
 
-br.response().read()
-
-print("> Resultado: ")
-print(br.response().read())
+soup = BeautifulSoup(br.response().read(), 'lxml') # pip install lxml
+spans = soup.find_all('a', {'href': 'Monitor.jsp'})
+print(spans[0])
