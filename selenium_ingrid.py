@@ -13,58 +13,79 @@ options = Options()
 options.add_argument('--window-size=2560,1440')
 options.add_argument('--log-level=3')
 options.add_argument('--ignore-certificate-errors')
-options.headless = True
+#options.headless = True
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
 browser = webdriver.Chrome(executable_path=r"C:\Users\jbnf\driver\chromedriver.exe", chrome_options=options) # cuidado com a versão do chromedriver)
 
-browser.get('https://10.83.101.238:8443/ingrid_bdgd')
+ingrids = [
+'https://10.83.101.58:8443/ingrid_bdgd',
+'https://10.83.101.59:8443/ingrid_bdgd',
+'https://10.83.101.60:8443/ingrid_bdgd_emg',
+'https://10.83.101.60:8443/ingrid_bdgd_enf',
+'https://10.83.101.61:8443/ingrid_bdgd',
+'https://10.83.101.62:8443/ingrid_bdgd',
+'http://10.83.102.99:8080/ingrid_bdgd',
+'https://10.83.101.64:8443/ingrid_bdgd',
+'http://10.83.103.105:8080/ingrid_bdgd',
+'https://10.83.101.234:8443/ingrid_bdgd',
+'https://10.83.101.238:8443/ingrid_bdgd',
+'http://10.83.106.183:8080/ingrid_bdgd',
+'http://10.83.101.18:8080/ingrid_bdgd'
+]
 
-delay = 3 # seconds
-try:
-    myElem = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.ID, 'id_usuario')))
-    print("Pagina de Login aberta!")
-except TimeoutException:
-    print ("Loading took too much time!")
+for ingrid in ingrids:
+    print("Acessando: ", ingrid)
+    browser.get(ingrid)
+    delay = 3 # seconds / tempo de espera dos elementos
+    try:
+        myElem1 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.ID, 'id_usuario')))
+        print("Pagina de Login aberta!")
+    except TimeoutException:
+        print ("Loading took too much time!")
 
-username = browser.find_element(By.ID, "id_usuario")
-password = browser.find_element(By.ID, "senha")
+    username = browser.find_element(By.ID, "id_usuario")
+    password = browser.find_element(By.ID, "senha")
 
-username.send_keys("coord")
-password.send_keys("indra")
+    username.send_keys("coord")
+    password.send_keys("indra")
 
-delay = 3 # seconds
+    try:
+        myElem2 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, "/html")))
+        print("Pagina de Agendamentos aberta!")
+    except TimeoutException:
+        continue
+        print ("Loading took too much time!")
 
-browser.find_element(By.XPATH, "/html/body/form/div/div[2]/div[4]/button").submit()
+    browser.find_element(By.XPATH, "/html/body/form/div/div[2]/div[4]/button").submit()
 
-delay = 3 # seconds
-try:
-    myElem = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[22]/div/div[1]/div/span[5]')))
-    print("Ingrid aberto!")
-except TimeoutException:
-    print ("Loading took too much time!")
+    try:
+        myElem3 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[22]/div/div[1]/div/span[5]')))
+        print("Ingrid aberto!")
+    except TimeoutException:
+        print ("Loading took too much time!")
 
-browser.find_element(By.XPATH, "/html/body/div[22]/div/div[1]/div/span[5]").click()
+    browser.find_element(By.XPATH, "/html/body/div[22]/div/div[1]/div/span[5]").click()
 
-delay = 3 # seconds
-try:
-    myElem = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")))
-    print("Agendamentos abertos!")
+    try:
+        myElem4 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")))
+        print("Agendamentos abertos!")
 
-    print("#######################################################")
-    print("ÚLTIMO AGENDAMENTO:")
+        print("#######################################################")
+        print("#### INGRID: ", ingrid)
+        print("ÚLTIMO AGENDAMENTO: ")
 
-    ## TODO, ADICIONAR NUMA TABELA (pandas)
-    ## todo, guardar num json
+        ## TODO, ADICIONAR NUMA TABELA (pandas)
+        ## todo, guardar num json
 
-    table = browser.find_element(By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")
-    rows = table.find_elements(By.TAG_NAME, "tr")
+        table = browser.find_element(By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")
+        rows = table.find_elements(By.TAG_NAME, "tr")
 
-    for data in rows[1].find_elements(By.TAG_NAME, "td"):
-        print(data.text)
+        for data in rows[1].find_elements(By.TAG_NAME, "td"):
+            print(data.text)
 
-    print("#######################################################")
-except TimeoutException:
-    print ("Loading took too much time!")
+        print("#######################################################")
+    except TimeoutException:
+        print ("Loading took too much time!")
 
 browser.quit()
