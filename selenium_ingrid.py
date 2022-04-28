@@ -5,12 +5,19 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+import logging
+logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
+logger.setLevel(logging.CRITICAL)  # or any variant from ERROR, CRITICAL or NOTSET
+
 options = Options()
-options.add_argument('--disable-logging')
+options.add_argument('--log-level=3')
+options.add_argument('--ignore-certificate-errors')
+# options.headless = True
+# options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-browser = webdriver.Chrome(executable_path=r"D:\joab\drivers\chromedriver.exe", chrome_options=options) # cuidado com a versão do chromedriver)
+browser = webdriver.Chrome(executable_path=r"C:\Users\jbnf\driver\chromedriver.exe", chrome_options=options) # cuidado com a versão do chromedriver)
 
-browser.get('http://10.155.2.18:8080/ingrid_bdgd')
+browser.get('https://10.83.101.238:8443/ingrid_bdgd')
 
 delay = 3 # seconds
 try:
@@ -56,10 +63,10 @@ try:
     print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[7]").text)
     print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[8]").text)
     print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[9]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[11]").text)
+    # print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[11]").text)
     print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[12]").text)
     print("#######################################################")
 except TimeoutException:
     print ("Loading took too much time!")
 
-browser.close()
+browser.quit()
