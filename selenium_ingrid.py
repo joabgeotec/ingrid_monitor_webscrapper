@@ -10,10 +10,11 @@ logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
 logger.setLevel(logging.CRITICAL)  # or any variant from ERROR, CRITICAL or NOTSET
 
 options = Options()
+options.add_argument('--window-size=2560,1440')
 options.add_argument('--log-level=3')
 options.add_argument('--ignore-certificate-errors')
-# options.headless = True
-# options.add_experimental_option("excludeSwitches", ["enable-logging"])
+options.headless = True
+options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
 browser = webdriver.Chrome(executable_path=r"C:\Users\jbnf\driver\chromedriver.exe", chrome_options=options) # cuidado com a versão do chromedriver)
 
@@ -47,7 +48,7 @@ browser.find_element(By.XPATH, "/html/body/div[22]/div/div[1]/div/span[5]").clic
 
 delay = 3 # seconds
 try:
-    myElem = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[2]')))
+    myElem = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")))
     print("Agendamentos abertos!")
 
     print("#######################################################")
@@ -55,16 +56,13 @@ try:
 
     ## TODO, ADICIONAR NUMA TABELA (pandas)
     ## todo, guardar num json
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[2]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[3]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[4]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[5]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[6]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[7]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[8]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[9]").text)
-    # print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[11]").text)
-    print(browser.find_element(By.XPATH, "/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td[12]").text)
+
+    table = browser.find_element(By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")
+    rows = table.find_elements(By.TAG_NAME, "tr")
+
+    for data in rows[1].find_elements(By.TAG_NAME, "td"):
+        print(data.text)
+
     print("#######################################################")
 except TimeoutException:
     print ("Loading took too much time!")
