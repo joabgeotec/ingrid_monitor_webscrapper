@@ -36,7 +36,7 @@ ingrids = [
 
 for ingrid in ingrids:
     print("Acessando: ", ingrid)
-    browser.get(string[8:len(string)])
+    browser.get(ingrid[8:len(ingrid)])
     delay = 3 # seconds / tempo de espera dos elementos
     try:
         myElem1 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.ID, 'id_usuario')))
@@ -72,8 +72,8 @@ for ingrid in ingrids:
         print("Agendamentos abertos!")
 
         print("#######################################################")
-        print("EMPRESA: ", string[0:7])
-        print("SITE: ", string[8:len(string)])
+        print("EMPRESA: ", ingrid[0:7])
+        print("SITE: ", ingrid[8:len(ingrid)])
         print("ÚLTIMO AGENDAMENTO: ")
 
         ## TODO, ADICIONAR NUMA TABELA (pandas)
