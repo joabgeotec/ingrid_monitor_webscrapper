@@ -13,30 +13,30 @@ options = Options()
 options.add_argument('--window-size=2560,1440')
 options.add_argument('--log-level=3')
 options.add_argument('--ignore-certificate-errors')
-#options.headless = True
+options.headless = True
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
 browser = webdriver.Chrome(executable_path=r"C:\Users\jbnf\driver\chromedriver.exe", chrome_options=options) # cuidado com a versão do chromedriver)
 
 ingrids = [
-'https://10.83.101.58:8443/ingrid_bdgd',
-'https://10.83.101.59:8443/ingrid_bdgd',
-'https://10.83.101.60:8443/ingrid_bdgd_emg',
-'https://10.83.101.60:8443/ingrid_bdgd_enf',
-'https://10.83.101.61:8443/ingrid_bdgd',
-'https://10.83.101.62:8443/ingrid_bdgd',
-'http://10.83.102.99:8080/ingrid_bdgd',
-'https://10.83.101.64:8443/ingrid_bdgd',
-'http://10.83.103.105:8080/ingrid_bdgd',
-'https://10.83.101.234:8443/ingrid_bdgd',
-'https://10.83.101.238:8443/ingrid_bdgd',
-'http://10.83.106.183:8080/ingrid_bdgd',
-'http://10.83.101.18:8080/ingrid_bdgd'
+'EPB PRD|https://10.83.101.58:8443/ingrid_bdgd',
+'EBO PRD|https://10.83.101.59:8443/ingrid_bdgd',
+'EMG PRD|https://10.83.101.60:8443/ingrid_bdgd_emg',
+'ENF PRD|https://10.83.101.60:8443/ingrid_bdgd_enf',
+'ESE PRD|https://10.83.101.61:8443/ingrid_bdgd',
+'EMT PRD|https://10.83.101.62:8443/ingrid_bdgd',
+'ETO PRD|http://10.83.102.99:8080/ingrid_bdgd',
+'ESS PRD|https://10.83.101.64:8443/ingrid_bdgd',
+'EMS PRD|http://10.83.103.105:8080/ingrid_bdgd',
+'ERO PRD|https://10.83.101.234:8443/ingrid_bdgd',
+'EAC PRD|https://10.83.101.238:8443/ingrid_bdgd',
+'EMS HML|http://10.83.106.183:8080/ingrid_bdgd',
+'EBO HML|http://10.83.106.18:8080/ingrid_bdgd'
 ]
 
 for ingrid in ingrids:
     print("Acessando: ", ingrid)
-    browser.get(ingrid)
+    browser.get(string[8:len(string)])
     delay = 3 # seconds / tempo de espera dos elementos
     try:
         myElem1 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.ID, 'id_usuario')))
@@ -72,7 +72,8 @@ for ingrid in ingrids:
         print("Agendamentos abertos!")
 
         print("#######################################################")
-        print("#### INGRID: ", ingrid)
+        print("EMPRESA: ", string[0:7])
+        print("SITE: ", string[8:len(string)])
         print("ÚLTIMO AGENDAMENTO: ")
 
         ## TODO, ADICIONAR NUMA TABELA (pandas)
