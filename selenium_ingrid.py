@@ -138,6 +138,16 @@ for ingrid in ingrids:
         print ("Loading took too much time!")
         continue
 
+with open('ingrid_bdgd.csv', 'w', encoding='UTF8', newline='') as f:
+    writer = csv.writer(f)
+
+    # write the header
+    writer.writerow(header)
+
+    # write multiple rows
+    writer.writerows(data_csv)
+
+
 print(data_csv)
 print("--- %s seconds ---" % (time.time() - start_time))
 browser.quit()
