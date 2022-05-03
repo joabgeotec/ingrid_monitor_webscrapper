@@ -37,6 +37,8 @@ ingrids = [
 ]
 
 for ingrid in ingrids:
+
+    print("#######################################################")
     print("Acessando: ", ingrid)
     browser.get(ingrid[8:len(ingrid)])
     delay = 3 # seconds / tempo de espera dos elementos
@@ -68,7 +70,6 @@ for ingrid in ingrids:
         myElem4 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")))
         print("Agendamentos abertos!")
 
-        print("#######################################################")
         print("EMPRESA: ", ingrid[0:7])
         print("SITE: ", ingrid[8:len(ingrid)])
         print("ÚLTIMO AGENDAMENTO: ")
@@ -81,14 +82,14 @@ for ingrid in ingrids:
 
         cel_button = len(rows[1].find_elements(By.TAG_NAME, "td")) - 2
 
-        print('DEBUG ', rows[1].find_elements(By.TAG_NAME, "td")[cel_button].get_attribute('innerHTML'))
+        #print('DEBUG ', rows[1].find_elements(By.TAG_NAME, "td")[cel_button].get_attribute('innerHTML'))
 
         if rows[1].find_elements(By.TAG_NAME, "td")[cel_button].get_attribute('innerText') == 'Ver erro':
             button = '/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td['+str(cel_button + 1)+']/button'
             browser.find_elements(By.XPATH, button)[0].click()
             alerta = browser.find_element(By.CLASS_NAME, 'toast-message').text.replace('\n','').replace('Ocorreu um erro durante a extração.','')
             print(alerta)
-            time.sleep(5)
+            time.sleep(6)
 
         browser.find_element(By.XPATH, '//*[@id="editor-agendar-extrator"]/div[1]/a').click()
 
