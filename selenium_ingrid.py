@@ -6,6 +6,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import logging
+import time
+start_time = time.time()
 logger = logging.getLogger('selenium.webdriver.remote.remote_connection')
 logger.setLevel(logging.CRITICAL)  # or any variant from ERROR, CRITICAL or NOTSET
 
@@ -50,13 +52,6 @@ for ingrid in ingrids:
     username.send_keys("coord")
     password.send_keys("indra")
 
-    try:
-        myElem2 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, "/html")))
-        print("Pagina de Agendamentos aberta!")
-    except TimeoutException:
-        continue
-        print ("Loading took too much time!")
-
     browser.find_element(By.XPATH, "/html/body/form/div/div[2]/div[4]/button").submit()
 
     try:
@@ -76,17 +71,41 @@ for ingrid in ingrids:
         print("SITE: ", ingrid[8:len(ingrid)])
         print("ÚLTIMO AGENDAMENTO: ")
 
-        ## TODO, ADICIONAR NUMA TABELA (pandas)
-        ## todo, guardar num json
-
         table = browser.find_element(By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")
         rows = table.find_elements(By.TAG_NAME, "tr")
 
         for data in rows[1].find_elements(By.TAG_NAME, "td"):
             print(data.text)
 
+        cel_button = len(rows[1].find_elements(By.TAG_NAME, "td")) - 1
+
+        if rows[1].find_elements(By.TAG_NAME, "td")[cel_button].get_attribute('innerText') == "Ver erro":
+            button = '/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td['+str(cel_button)+']/button'
+            browser.find_elements(By.XPATH, button)[0].click()
+            alerta = browser.find_element(By.CLASS_NAME, 'toast-message').text.replace('\n','').replace('Ocorreu um erro durante a extração.','')
+            print(alerta)
+        
+        browser.find_element(By.XPATH, '//*[@id="editor-agendar-extrator"]/div[1]/a').click()
+
+        browser.find_element(By.XPATH, '//*[@id="menu"]/span[6]/a').click()
+        print("Monitor de Processo:")
+
+        try:
+            myElem4 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, '//*[@id="LogProcessamentoTableContainer"]/div/table/tbody/tr[1]/td[1]')))
+            
+            monitor_cell = browser.find_element(By.XPATH, '//*[@id="LogProcessamentoTableContainer"]/div/table/tbody/tr[1]/td[1]')
+            print(monitor_cell.text)
+        except TimeoutException:
+            print ("Loading took too much time!")
+
+
+
+        ## TODO, ADICIONAR NUMA TABELA (pandas)
+        ## todo, guardar num json/csv
+
         print("#######################################################")
     except TimeoutException:
         print ("Loading took too much time!")
 
+print("--- %s seconds ---" % (time.time() - start_time))
 browser.quit()
