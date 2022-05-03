@@ -79,14 +79,17 @@ for ingrid in ingrids:
         for data in rows[1].find_elements(By.TAG_NAME, "td"):
             print(data.text)
 
-        cel_button = len(rows[1].find_elements(By.TAG_NAME, "td")) - 1
+        cel_button = len(rows[1].find_elements(By.TAG_NAME, "td")) - 2
 
-        if rows[1].find_elements(By.TAG_NAME, "td")[cel_button].get_attribute('innerText') == "Ver erro":
-            button = '/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td['+str(cel_button)+']/button'
+        print('DEBUG ', rows[1].find_elements(By.TAG_NAME, "td")[cel_button].get_attribute('innerHTML'))
+
+        if rows[1].find_elements(By.TAG_NAME, "td")[cel_button].get_attribute('innerText') == 'Ver erro':
+            button = '/html/body/div[2]/div/div/div[2]/form/div[2]/div/div/div/table/tbody/tr[1]/td['+str(cel_button + 1)+']/button'
             browser.find_elements(By.XPATH, button)[0].click()
             alerta = browser.find_element(By.CLASS_NAME, 'toast-message').text.replace('\n','').replace('Ocorreu um erro durante a extração.','')
             print(alerta)
-        
+            time.sleep(5)
+
         browser.find_element(By.XPATH, '//*[@id="editor-agendar-extrator"]/div[1]/a').click()
 
         browser.find_element(By.XPATH, '//*[@id="menu"]/span[6]/a').click()
