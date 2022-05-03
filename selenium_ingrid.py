@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+import csv
 import logging
 import time
 start_time = time.time()
@@ -36,10 +37,17 @@ ingrids = [
 'EBO HML|http://10.83.106.18:8080/ingrid_bdgd'
 ]
 
+header = ['SERVIDOR', 'EMPRESA', 'AGENDAMENTO', 'ESTUDO', 'SITUAÇÃO', 'OBS']
+data_csv = []
+
+
 for ingrid in ingrids:
+
+    row_csv = []
 
     print("#######################################################")
     print("Acessando: ", ingrid)
+
     browser.get(ingrid[8:len(ingrid)])
     delay = 3 # seconds / tempo de espera dos elementos
     try:
@@ -77,8 +85,10 @@ for ingrid in ingrids:
         table = browser.find_element(By.CSS_SELECTOR, "#AgendarExtratorTableContainer > div > table")
         rows = table.find_elements(By.TAG_NAME, "tr")
 
+        data_table_agendamento = []
         for data in rows[1].find_elements(By.TAG_NAME, "td"):
             print(data.text)
+            data_table_agendamento.append(data.text)
 
         cel_button = len(rows[1].find_elements(By.TAG_NAME, "td")) - 2
 
@@ -107,14 +117,27 @@ for ingrid in ingrids:
             print ("Loading took too much time!")
             continue
 
+        ## montagem do csv
+        start_row0 = ingrid.find("//") + len("//")
+        end_row0 = ingrid.find(":8")
+        substring_row0 = ingrid[start_row0:end_row0]
+        row_csv.append(substring_row0)
+        row_csv.append(ingrid[0:7])
+        row_csv.append(data_table_agendamento[3])
+        row_csv.append(data_table_agendamento[1])
+        if ingrid[0:7][4:7] == 'PRD':
+            row_csv.append(data_table_agendamento[10])
+        else: 
+            row_csv.append(data_table_agendamento[11])
+        row_csv.append(monitor_cell.text)
 
-        ## TODO, ADICIONAR NUMA TABELA (pandas)
-        ## todo, guardar num json/csv
+        data_csv.append(row_csv)
 
         print("#######################################################")
     except TimeoutException:
         print ("Loading took too much time!")
         continue
 
+print(data_csv)
 print("--- %s seconds ---" % (time.time() - start_time))
 browser.quit()
