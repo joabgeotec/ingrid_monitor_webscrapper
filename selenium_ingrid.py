@@ -90,6 +90,8 @@ for ingrid in ingrids:
         browser.find_element(By.XPATH, '//*[@id="menu"]/span[6]/a').click()
         print("Monitor de Processo:")
 
+        time.sleep(5)
+
         try:
             myElem4 = WebDriverWait(browser, delay).until(EC.presence_of_element_located((By.XPATH, '//*[@id="LogProcessamentoTableContainer"]/div/table/tbody/tr[1]/td[1]')))
             
