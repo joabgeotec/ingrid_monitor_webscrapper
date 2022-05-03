@@ -45,6 +45,7 @@ for ingrid in ingrids:
         print("Pagina de Login aberta!")
     except TimeoutException:
         print ("Loading took too much time!")
+        continue
 
     username = browser.find_element(By.ID, "id_usuario")
     password = browser.find_element(By.ID, "senha")
@@ -59,6 +60,7 @@ for ingrid in ingrids:
         print("Ingrid aberto!")
     except TimeoutException:
         print ("Loading took too much time!")
+        continue
 
     browser.find_element(By.XPATH, "/html/body/div[22]/div/div[1]/div/span[5]").click()
 
@@ -99,7 +101,7 @@ for ingrid in ingrids:
             print(monitor_cell.text)
         except TimeoutException:
             print ("Loading took too much time!")
-
+            continue
 
 
         ## TODO, ADICIONAR NUMA TABELA (pandas)
@@ -108,6 +110,7 @@ for ingrid in ingrids:
         print("#######################################################")
     except TimeoutException:
         print ("Loading took too much time!")
+        continue
 
 print("--- %s seconds ---" % (time.time() - start_time))
 browser.quit()
