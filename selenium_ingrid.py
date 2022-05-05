@@ -34,7 +34,8 @@ ingrids = [
 'ERO PRD|https://10.83.101.234:8443/ingrid_bdgd',
 'EAC PRD|https://10.83.101.238:8443/ingrid_bdgd',
 'EMS HML|http://10.83.106.183:8080/ingrid_bdgd',
-'EBO HML|http://10.83.106.18:8080/ingrid_bdgd'
+'EBO HML|http://10.83.106.18:8080/ingrid_bdgd',
+'EPB HML|https://10.83.106.97:8443/ingrid_bdgd/'
 ]
 
 header = ['SERVIDOR', 'EMPRESA', 'AGENDAMENTO', 'ESTUDO', 'SITUAÇÃO', 'OBS']
@@ -99,7 +100,10 @@ for ingrid in ingrids:
             browser.find_elements(By.XPATH, button)[0].click()
             alerta = browser.find_element(By.CLASS_NAME, 'toast-message').text.replace('\n','').replace('Ocorreu um erro durante a extração.','')
             print(alerta)
+            # escapar o click de um alerta grande que sobrescreva o click posterior
+            browser.find_element(By.XPATH, '//*[@id="editor-agendar-extrator"]/div[1]/h4').click()
             time.sleep(6)
+
 
         browser.find_element(By.XPATH, '//*[@id="editor-agendar-extrator"]/div[1]/a').click()
 
