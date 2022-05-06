@@ -38,7 +38,7 @@ ingrids = [
 'EPB HML|https://10.83.106.97:8443/ingrid_bdgd/'
 ]
 
-header = ['SERVIDOR', 'EMPRESA', 'AGENDAMENTO', 'ESTUDO', 'SITUAÇÃO', 'OBS']
+header = ['SERVIDOR', 'EMPRESA', 'AGENDAMENTO', 'ESTUDO', 'SITUAÇÃO', 'OBS', 'ALERTA']
 data_csv = []
 
 
@@ -134,6 +134,8 @@ for ingrid in ingrids:
         else: 
             row_csv.append(data_table_agendamento[11])
         row_csv.append(monitor_cell.text)
+        if alerta is not None:
+            row_csv.append(alerta)
 
         data_csv.append(row_csv)
 

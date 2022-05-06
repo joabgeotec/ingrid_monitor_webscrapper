@@ -53,7 +53,7 @@
  [],
  False,
  False,
- 1651770228,
+ 1651858271,
  [('run.exe',
    'C:\\Users\\jbrito\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit\\run.exe',
    'EXECUTABLE')])
